@@ -1,0 +1,190 @@
+  #polymer equilibration
+
+units		lj
+boundary		p p p
+atom_style	full
+pair_style	lj/cut/coul/debye 0.3080 1.1224 10
+pair_modify     	shift yes
+bond_style      	harmonic
+dielectric	80
+read_data		polymer_2.data
+bond_coeff	1 15480 1
+mass 		1 1 
+pair_coeff	1 1 1 1 1.1224
+special_bonds 	lj/coul 0.0 0.0 0.0 
+neigh_modify	one 5000
+comm_modify        	cutoff 3.6
+group		last id 121
+group		non_last id 1:120
+group 		allpoly id 1:121
+group 		e_last id 1:119
+log		logeq.1
+velocity		last set 0.0 0.0 0.0 
+velocity 		non_last create 1 76858 mom yes units box 
+variable		z121 equal "z[121]"
+variable		x121 equal "x[121]"
+variable		y121 equal "y[121]"
+timestep 		0.005
+compute		mytemp allpoly temp
+compute 		gpoly allpoly gyration
+thermo_style	custom step temp etotal ebond epair v_x121 v_y121 v_z121 c_gpoly
+thermo_modify	temp mytemp 
+thermo		5000
+fix		f_staticxy121 last setforce 0.0 0.0 0.0	
+fix 		walley e_last wall/lj126 zhi -8.0 1 1 1.1224 units box pbc yes 
+fix 		f_nve non_last nve/limit 0.1
+fix		f_langevin non_last langevin 1 1 1 923456
+dump 		one allpoly custom 1000000 equilibrate_1.lammpstrj id mol type q x y z 	
+run		10000000
+write_data 	data2eq.func_1_1
+write_restart 	restart2eq.func_1_1
+run 		2000000
+write_data 	data2eq.func_1_2
+write_restart 	restart2eq.func_1_2
+run 		2000000
+write_data 	data2eq.func_1_3
+write_restart 	restart2eq.func_1_3
+run 		2000000
+write_data 	data2eq.func_1_4
+write_restart 	restart2eq.func_1_4
+run 		2000000
+write_data 	data2eq.func_1_5
+write_restart 	restart2eq.func_1_5
+run 		2000000
+write_data 	data2eq.func_1_6
+write_restart 	restart2eq.func_1_6
+run 		2000000
+write_data 	data2eq.func_1_7
+write_restart 	restart2eq.func_1_7
+run 		2000000
+write_data 	data2eq.func_1_8
+write_restart 	restart2eq.func_1_8
+run 		2000000
+write_data 	data2eq.func_1_9
+write_restart 	restart2eq.func_1_9
+run 		2000000
+write_data 	data2eq.func_1_10
+write_restart 	restart2eq.func_1_10
+run 		2000000
+write_data 	data2eq.func_1_11
+write_restart 	restart2eq.func_1_11
+run 		2000000
+write_restart 	restart2eq.func_1_12
+write_data 	data2eq.func_1_12
+run 		2000000
+write_data 	data2eq.func_1_13
+write_restart 	restart2eq.func_1_13
+run 		2000000
+write_data 	data2eq.func_1_14
+write_restart 	restart2eq.func_1_4
+run 		2000000
+write_data 	data2eq.func_1_15
+write_restart 	restart2eq.func_1_15
+run 		2000000
+write_data 	data2eq.func_1_16
+write_restart 	restart2eq.func_1_16
+run 		2000000
+write_data 	data2eq.func_1_17
+write_restart 	restart2eq.func_1_17
+run 		2000000
+write_restart 	restart2eq.func_1_18
+write_data 	data2eq.func_1_18
+run 		2000000
+write_data 	data2eq.func_1_19
+write_restart 	restart2eq.func_1_19
+run 		2000000
+write_data 	data2eq.func_1_20
+write_restart 	restart2eq.func_1_20
+run 		2000000
+write_data 	data2eq.func_1_21
+write_restart 	restart2eq.func_1_21
+run 		2000000
+write_data 	data2eq.func_1_22
+write_restart 	restart2eq.func_1_22
+run 		2000000
+write_restart 	restart2eq.func_1_23
+write_data 	data2eq.func_1_23
+run 		2000000
+write_restart 	restart2eq.func_1_24
+write_data 	data2eq.func_1_24
+run 		2000000
+write_data 	data2eq.func_1_25
+write_restart 	restart2eq.func_1_25
+run 		2000000
+write_data 	data2eq.func_1_26
+write_restart 	restart2eq.func_1_26
+run 		2000000
+write_data 	data2eq.func_1_27
+write_restart 	restart2eq.func_1_27
+run 		2000000
+write_data 	data2eq.func_1_28
+write_restart 	restart2eq.func_1_28
+run 		2000000
+write_data 	data2eq.func_1_29
+write_restart 	restart2eq.func_1_29
+run 		2000000
+write_data 	data2eq.func_1_30
+write_restart 	restart2eq.func_1_30
+run 		2000000
+write_data 	data2eq.func_1_31
+write_restart 	restart2eq.func_1_31
+run 		2000000
+write_data 	data2eq.func_1_32
+write_restart 	restart2eq.func_1_32
+run 		2000000
+write_data 	data2eq.func_1_33
+write_restart 	restart2eq.func_1_33
+run 		2000000
+write_data 	data2eq.func_1_34
+write_restart 	restart2eq.func_1_34
+run 		2000000
+write_data 	data2eq.func_1_35
+write_restart 	restart2eq.func_1_35
+run 		2000000
+write_data 	data2eq.func_1_36
+write_restart 	restart2eq.func_1_36
+run 		2000000
+write_data 	data2eq.func_1_37
+write_restart 	restart2eq.func_1_37
+run 		2000000
+write_data 	data2eq.func_1_38
+write_restart 	restart2eq.func_1_38
+run 		2000000
+write_data 	data2eq.func_1_39
+write_restart 	restart2eq.func_1_39
+run 		2000000
+write_data 	data2eq.func_1_40
+write_restart 	restart2eq.func_1_40
+run 		2000000
+write_data 	data2eq.func_1_41
+write_restart 	restart2eq.func_1_41
+run 		2000000
+write_data 	data2eq.func_1_42
+write_restart 	restart2eq.func_1_42
+run 		2000000
+write_data 	data2eq.func_1_43
+write_restart 	restart2eq.func_1_43
+run 		2000000
+write_data 	data2eq.func_1_44
+write_restart 	restart2eq.func_1_44
+run 		2000000
+write_data 	data2eq.func_1_45
+write_restart 	restart2eq.func_1_45
+run 		2000000
+write_data 	data2eq.func_1_46
+write_restart 	restart2eq.func_1_46
+run 		2000000
+write_data 	data2eq.func_1_47
+write_restart 	restart2eq.func_1_47
+run 		2000000
+write_data 	data2eq.func_1_48
+write_restart 	restart2eq.func_1_48
+run 		2000000
+write_data 	data2eq.func_1_49
+write_restart 	restart2eq.func_1_49
+run 		2000000
+write_data 	data2eq.func_1_50
+write_restart 	restart2eq.func_1_50
+run 		2000000
+write_data 	data2eq.func_1_51
+write_restart 	restart2eq.func_1_51

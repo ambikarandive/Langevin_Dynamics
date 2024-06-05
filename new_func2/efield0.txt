@@ -1,0 +1,86 @@
+ ###electrical_field
+ 
+ 
+units		lj
+boundary		p p p
+atom_style	full
+pair_style	lj/cut/coul/debye 0.3080 1.1224 10
+dielectric 	80
+pair_modify     	shift yes
+bond_style      	harmonic
+read_data 	read_1_1.data
+bond_coeff	1 15480 1
+mass 		1 1 
+mass		2 1
+mass		3 1
+pair_coeff	1 1 1 1 1.1224
+pair_coeff	1 2 1 1 1.1224
+pair_coeff	1 3 1 0.625 0.7015
+pair_coeff	2 3 1 0.625 0.7015
+pair_coeff	2 2 1 1 1.1224
+pair_coeff	3 3 1 0.25 0.2806
+neigh_modify	exclude type 3 3 
+neigh_modify	exclude type 2 2
+neigh_modify	exclude type 2 3
+neigh_modify	one 5000
+comm_modify        	cutoff 3.6
+special_bonds 	lj/coul 0.0 0.0 0.0 
+group 		all id 1:7620
+group 		allpoly id 1:121
+group		last id 121
+group		non_last id 1:120
+group		pore id 122:7620
+group		poly molecule 1
+region 		inside_pore1 cylinder z 0 0 3.2 -8 8 side in units box 
+velocity		pore set 0.0 0.0 0.0
+velocity 		last set 0.0 0.0 0.0
+velocity 		non_last create 1 76858 mom yes units box 
+log 		log.1
+variable		z121 equal "z[121]"
+variable		x121 equal "x[121]"
+variable		y121 equal "y[121]"
+variable		z61 equal "z[61]"
+timestep 		0.005
+fix		f_staticpore pore setforce 0.0 0.0 0.0
+fix		f_staticxy121 last setforce 0.0 0.0 0.0	
+fix 		f_nve non_last nve
+fix		f_langevin non_last langevin 1 1 1 923456
+compute		mytemp allpoly temp
+thermo_style	custom step temp etotal ebond epair pe ke ecoul v_x121 v_y121 v_z121
+thermo_modify	temp mytemp 
+thermo		1000
+dump 		poly_out allpoly custom 100000 eq_1.lammpstrj id mol type q x y z fx fy fz	
+run 		100000
+unfix 		f_staticxy121
+unfix 		f_nve
+unfix 		f_langevin
+velocity 		allpoly create 1 76858 mom yes units box 
+fix 		f_nve allpoly nve
+fix		f_langevin allpoly langevin 1 1 1 923456
+fix 		2 allpoly efield 0 0 -0.061 region inside_pore1
+undump 		poly_out	
+dump 		poly_out allpoly custom 500 elfield_1.lammpstrj id mol type q x y z fx fy fz
+variable 		desired_z_min equal -8
+variable 		desired_z_max equal 8
+variable 		nbeads equal 121
+compute 		bead_z allpoly property/atom z
+variable		z121 equal "z[121]"
+variable 		z61 equal "z[61]"
+label  loopa
+variable a loop 4000
+         run 10000
+         variable count loop 3
+         variable count1 loop 3
+         if "${z61}<-8" then "next count"
+         if "${z121}<-11"  then "next count"
+         if "${z61}>8.1"  then "next count1"
+         if "${z121}>8.1"  then "next count1"
+         print "counter is equal to ${count}"
+         print "counter1 is equal to ${count1}"
+         if "${count}==3 || ${count1}==3" then "jump SELF endloop"
+         variable count delete
+         variable count1 delete
+         next a
+jump SELF loopa
+label endloop
+if "${count1}==3" then "run 50000"
